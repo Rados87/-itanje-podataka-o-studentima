@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Čitanje podataka o studentima</title>
+</head>
+
+<body>
+
+    <div id="student-container"></div>
+
+    <script>
+        class Student {
+            constructor(name, address, phone, course) {
+                this.name = name;
+                this.address = address;
+                this.phone = phone;
+                this.course = course;
+            }
+
+            getInfo() {
+                return "Name: " + this.name + "<br>" +
+                    "Address: " + this.address + "<br>" +
+                    "Phone: " + this.phone + "<br>" +
+                    "Course: " + this.course + "<br><br>";
+            }
+        }
+
+        // Učitavanje podataka iz fajla
+        fetch('https://v-dresevic.github.io/Advanced-JavaScript-Programming/data/students.txt')
+            .then(response => response.text())
+            .then(data => {
+                // Parsiranje podataka i kreiranje Student objekata
+                const lines = data.split('\n');
+                const students = [];
+                let name, address, phone, course;
+
+                for (let i = 0; i < lines.length; i += 4) {
+                    name = lines[i];
+                    address = lines[i + 1];
+                    phone = lines[i + 2];
+                    course = lines[i + 3];
+
+                    const student = new Student(name, address, phone, course);
+                    students.push(student);
+                }
+
+                // Prikazivanje podataka o studentima na stranici
+                const container = document.getElementById('student-container');
+                students.forEach(student => {
+                    const studentInfo = document.createElement('p');
+                    studentInfo.innerHTML = student.getInfo();
+                    container.appendChild(studentInfo);
+                });
+            })
+            .catch(error => {
+                console.error('An error occurred:', error);
+            });
+    </script>
+</body>
+
+</html>
